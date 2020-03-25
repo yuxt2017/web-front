@@ -1,0 +1,62 @@
+<div class="pagination-table">
+    <div class="table-wrap">
+        <el-table v-loading="options.loading" :data="list" :max-height="options.maxHeight" :stripe="options.stripe" ref="mutipleTable"
+            @selection-change="handleSelectionChange" header-cell-class-name="table-header" :border="options.border" header-row-class-name="headerRow">
+
+            <!--selection选择框-->
+            <el-table-column v-if="options.mutiSelect" type="selection" style="width: 50px;">
+            </el-table-column>
+
+            <!--序号-->
+            <el-table-column v-if="options.index" label="序号" type="index" width="50" align="center"></el-table-column>
+
+            <!--数据列-->
+            <template v-for="(column, index) in columns">
+                <el-table-column :prop="column.prop" :label="column.label" :align="column.align || 'center'" :width="column.width"
+                    :fixed="column.fixed">
+                    <template slot-scope="scope">
+
+                        <template v-if="!column.render">
+                            <template v-if="column.formatter">
+                                <span v-html="column.formatter(scope.row, column)"></span>
+                            </template>
+                            <template v-else>
+                                <span>{{scope.row[column.prop]}}</span>
+                            </template>
+                        </template>
+
+                        <!--render-->
+                        <template v-else>
+                            <expand-dom :column="column" :row="scope.row" :renderFn="column.render" :index="index"></expand-dom>
+                            <!-- <div v-html="column.formatterHtml(scope.row, column)"></div> -->
+                        </template>
+                    </template>
+                </el-table-column>
+            </template>
+
+            <!-- 按钮操作组-->
+            <el-table-column v-if="operates" ref="fixedColumn" label="操作" align="center" :width="operates.width" :fixed="operates.fixed">
+                <template slot-scope="scope">
+                    <div class="operate-group">
+                        <template v-for="(btn, key) in operates.list">
+                            <el-button :type="btn.type" :style="btn.style && btn.style()" :size="btn.size || 'mini'" :icon="btn.icon" :loading="btn.loading" :disabled="btn.loading || btn.disabled ||(btn.getDisabled && btn.getDisabled(scope.row)) || false" 
+                                v-show="!(btn.hide || (btn.getHide && btn.getHide(scope.row)))"
+                                :plain="btn.plain || true" @click.native.prevent="btn.method(scope.row, key)">{{(btn.formatter && btn.formatter(scope.row)) || btn.label}}
+                            </el-button>
+                        </template>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+
+    <!-- 分页-->
+    <el-pagination v-if="pagination.show" @size-change="handleSizeChange" @current-change="handleIndexChange"
+        :page-size="pagination.pageSize" :page-sizes="pagination.pageSizeArr && pagination.pageSizeArr.length > 0 ? pagination.pageSizeArr : [10, 15, 20, 50, 100]"
+        :current-page="pagination.pageNum" layout="total, prev, pager, next,jumper" :total="pagination.total"
+        style="margin-top: 20px;text-align: right"></el-pagination>
+    <!-- <el-pagination v-if="pagination.show" @size-change="handleSizeChange" @current-change="handleIndexChange"
+        :page-size="pagination.pageSize" :page-sizes="pagination.pageSizeArr && pagination.pageSizeArr.length > 0 ? pagination.pageSizeArr : [10, 15, 20, 50, 100]"
+        :current-page="pagination.pageNum" layout="total,sizes, prev, pager, next,jumper" :total="pagination.total"
+        style="margin-top: 20px;text-align: right"></el-pagination> -->
+</div>

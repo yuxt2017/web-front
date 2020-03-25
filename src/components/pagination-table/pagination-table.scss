@@ -1,0 +1,14 @@
+.pagination-table {
+    background: white;
+    /deep/ .el-table__body-wrapper.is-scrolling-none {
+        max-height: initial !important;
+    }
+    /deep/ .table-header {
+        background-color: #EDEFF2;
+    }
+    /deep/ .headerRow {
+        color: #333;
+        font-size: $medium;
+        font-weight: bold;
+    }
+}

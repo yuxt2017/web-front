@@ -1,0 +1,12 @@
+<div class="hello">
+    <!-- <input type="text" v-model="txt">
+    <p>{{ getTxt }}</p>
+    <button @click="add">add</button>
+    <p>{{ sum | filterFn1 }}</p> -->
+    <!-- <van-button round block type="info" @click="add">提交</van-button> -->
+    <hello-world msg="hello world" v-model="foo" @bind-fn="helloWorldCallBack">
+        <span>slot child 123</span>
+    </hello-world>
+    {{foo}}
+    <div>===========================</div>
+</div>
